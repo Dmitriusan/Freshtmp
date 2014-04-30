@@ -38,7 +38,6 @@ def move_files():
     for f in filenames:
       ext = os.path.splitext(f)
       if ext[1] in patch_extensions:
-        print "!!! {0}/{1}".format(directory, f)
         try:
           abs_path = os.path.join(directory, f)
           move(abs_path)
@@ -59,15 +58,15 @@ def move(file_path):
   print "Moving {0} to {1}".format(file_path, new_dir)
   if not os.path.exists(new_dir):
     os.makedirs(new_dir)
-  #shutil.move(file_path, new_dir)
-  shutil.copy(file_path, new_dir)
+  shutil.move(file_path, new_dir)
 
 def commit():
   print "Committing..."
+  subprocess.check_call(GIT_ADD_CMD)
   # Adding commit message
   message =time.strftime("Automatic commit on %d/%m/%Y %H:%M:%S")
   cmd = GIT_COMMIT_CMD + ["-m", message]
-  subprocess.check_call(cmd)
+  subprocess.call(cmd)
 
 
 def main():
