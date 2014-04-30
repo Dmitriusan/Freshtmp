@@ -26,8 +26,8 @@
       <file leaf-file-name="freshtmp.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/freshtmp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="942">
-              <caret line="0" column="2" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+            <state vertical-scroll-proportion="0.22292994" vertical-offset="0" max-vertical-offset="942">
+              <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -368,12 +368,12 @@
       <updated>1398870341841</updated>
       <workItem from="1398870346418" duration="781000" />
       <workItem from="1398871529659" duration="74000" />
-      <workItem from="1398871661804" duration="1181000" />
+      <workItem from="1398871661804" duration="1262000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2036000" />
+    <option name="totallyTimeSpent" value="2117000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="21" width="1852" height="1058" extended-state="0" />
@@ -448,8 +448,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/freshtmp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="942">
-          <caret line="0" column="2" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.22292994" vertical-offset="0" max-vertical-offset="942">
+          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
           <folding />
         </state>
       </provider>
