@@ -12,6 +12,8 @@ patch_extensions = [".patch", ".diff"]
 
 GIT_INIT_CMD = ["git", "init"]
 GIT_CLEAN_CMD = ["git", "clean", "-df"]
+GIT_TAG_CMD = ["git", "tag", "initial"]
+GIT_RESET_CMD = ["git", "reset", "--hard", "initial"]
 GIT_ADD_CMD = ["git", "add", "."]
 GIT_COMMIT_CMD = ["git", "commit", "-a"]
 git_dir = os.path.join(backup_repo_dir, ".git")
@@ -30,6 +32,8 @@ def prepare_repo_dir():
   if not os.path.isdir(git_dir):
     print "Initializing new git repository at {0}".format(backup_repo_dir)
     subprocess.check_call(GIT_INIT_CMD)
+    subprocess.check_call(GIT_TAG_CMD)
+  subprocess.check_call(GIT_RESET_CMD)
   subprocess.check_call(GIT_CLEAN_CMD)
 
 def move_files():
