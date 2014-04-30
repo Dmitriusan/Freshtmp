@@ -27,7 +27,6 @@ def prepare_repo_dir():
   if not os.path.isdir(git_dir):
     print "Initializing new git repository at {0}".format(backup_repo_dir)
     subprocess.check_call(GIT_INIT_CMD, env=git_env)
-  subprocess.check_output(["env"])
   subprocess.check_call(GIT_CLEAN_CMD, env=git_env)
 
 
