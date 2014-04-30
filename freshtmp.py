@@ -1,4 +1,4 @@
-#!/env python
+#!env python
 import os, subprocess
 
 work_dir = "/tmp"
