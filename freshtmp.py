@@ -44,11 +44,11 @@ def move_files():
   for directory, dirnames, filenames in os.walk(work_dir):
     for f in filenames:
       abs_path = os.path.join(directory, f)
-      if  is_applicable(abs_path):
-        try:
+      try:
+        if is_applicable(abs_path):
           move(abs_path)
-        except Exception, e:
-          print "Can not move file {0} : {1}".format(abs_path, e.message)
+      except Exception, e:
+        print "Can not move file {0} : {1}".format(abs_path, e.message)
     # try to remove directory if it is empty
     try:
       os.rmdir(directory)
@@ -62,8 +62,11 @@ def is_applicable(file_path):
   '''
   ext = os.path.splitext(file_path)
   now = time.time()
-  mod_time = os.stat(file_path).st_mtime
-  return ext[1] in patch_extensions and mod_time < now - stale_minutes * minute
+  result = os.path.isfile(file_path) and ext[1] in patch_extensions
+  if result: # additional check
+    mod_time = os.stat(file_path).st_mtime
+    result = mod_time < now - stale_minutes * minute
+  return result
 
 def move(file_path):
   # Extracts subpath from the working dir to a given path
