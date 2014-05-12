@@ -6,7 +6,10 @@ import time
 work_dir = "/tmp"
 backup_repo_dir = "/media/hotspot/backups/freshtmp_repo"
 patch_extensions = [".patch", ".diff"]
-
+# How many minutes since last file modification should pass
+# before it is considered stale
+stale_minutes = 120
+minute = 60 # seconds
 
 #####
 
@@ -40,10 +43,9 @@ def move_files():
   print "Working..."
   for directory, dirnames, filenames in os.walk(work_dir):
     for f in filenames:
-      ext = os.path.splitext(f)
-      if ext[1] in patch_extensions:
+      abs_path = os.path.join(directory, f)
+      if  is_applicable(abs_path):
         try:
-          abs_path = os.path.join(directory, f)
           move(abs_path)
         except Exception, e:
           print "Can not move file {0} : {1}".format(abs_path, e.message)
@@ -53,6 +55,15 @@ def move_files():
     except OSError:
       # ignore
       pass
+
+def is_applicable(file_path):
+  '''
+  Checks whether file is applicable for removal
+  '''
+  ext = os.path.splitext(file_path)
+  now = time.time()
+  mod_time = os.stat(file_path).st_mtime
+  return ext[1] in patch_extensions and mod_time < now - stale_minutes * minute
 
 def move(file_path):
   # Extracts subpath from the working dir to a given path
