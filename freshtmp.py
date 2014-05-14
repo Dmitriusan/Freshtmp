@@ -5,11 +5,14 @@ import time
 
 work_dir = "/tmp"
 backup_repo_dir = "/media/hotspot/backups/freshtmp_repo"
-patch_extensions = [".patch", ".diff"]
+patch_extensions = [".patch", ".diff", ".patch~", ".diff~"]
 # How many minutes since last file modification should pass
 # before it is considered stale
 stale_minutes = 120
 minute = 60 # seconds
+
+# How many file movements have been performed during run
+total_movements = 0
 
 #####
 
@@ -77,6 +80,8 @@ def move(file_path):
   if not os.path.exists(new_dir):
     os.makedirs(new_dir)
   shutil.move(file_path, new_dir)
+  global total_movements
+  total_movements += 1
 
 def commit():
   print "Committing..."
@@ -91,6 +96,9 @@ def main():
   prepare_repo_dir()
   move_files()
   commit()
+  global total_movements
+  print "Totals: {0} file(s) moved".format(total_movements)
+
 
 if __name__ == "__main__":
   main()
