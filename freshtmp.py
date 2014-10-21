@@ -64,8 +64,9 @@ def is_applicable(file_path):
   Checks whether file is applicable for removal
   '''
   ext = os.path.splitext(file_path)
+  filename = os.path.basename(file_path)
   now = time.time()
-  result = os.path.isfile(file_path) and ext[1] in patch_extensions
+  result = os.path.isfile(file_path) and (ext[1] in patch_extensions or '.patch.' in filename)
   if result: # additional check
     mod_time = os.stat(file_path).st_mtime
     result = mod_time < now - stale_minutes * minute
