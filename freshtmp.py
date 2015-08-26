@@ -110,7 +110,7 @@ def main():
                       action='store', help='Target directory for cleanup')
   parser.add_argument('-b', '--backup-directory', metavar='B', type=str,
                       action='store', help='Backup directory')
-  parser.add_argument('-T', '--stale-minutes', metavar='T', type=int,
+  parser.add_argument('-t', '--stale-minutes', metavar='T', type=int,
                       action='store', help='How many minutes since last file '
                                            'modification should pass before it '
                                            'is considered stale')
