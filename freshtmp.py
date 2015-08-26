@@ -106,7 +106,7 @@ def main():
     description='This script cleans up patch files from a given dir',
     epilog='Use at your own risk'
   )
-  parser.add_argument('-d', '--working-directory', metavar='D', type=str,
+  parser.add_argument('-d', '--target-directory', metavar='D', type=str,
                       action='store', help='Target directory for cleanup')
   parser.add_argument('-b', '--backup-directory', metavar='B', type=str,
                       action='store', help='Backup directory')
@@ -116,22 +116,24 @@ def main():
                                            'is considered stale')
   args = parser.parse_args()
 
-  if args.d:
+  if args.target_directory:
     global target_dir
-    target_dir = args.d
+    target_dir = args.target_directory
 
-  if args.b:
+  if args.backup_directory:
     global backup_repo_dir
-    backup_repo_dir = args.b
+    backup_repo_dir = args.backup_directory
 
-  if args.t:
+  if args.stale_minutes:
     global stale_minutes
-    stale_minutes = args.t
+    stale_minutes = args.stale_minutes
 
-  prepare_repo_dir()
-  move_files()
-  commit()
-  global total_movements
+  print "%s %s %s" % (target_dir, backup_repo_dir, stale_minutes)
+
+  #prepare_repo_dir()
+  #move_files()
+  #commit()
+  #global total_movements
   print "Totals: {0} file(s) moved".format(total_movements)
 
 
