@@ -128,12 +128,10 @@ def main():
     global stale_minutes
     stale_minutes = args.stale_minutes
 
-  print "%s %s %s" % (target_dir, backup_repo_dir, stale_minutes)
-
-  #prepare_repo_dir()
-  #move_files()
-  #commit()
-  #global total_movements
+  prepare_repo_dir()
+  move_files()
+  commit()
+  global total_movements
   print "Totals: {0} file(s) moved".format(total_movements)
 
 
