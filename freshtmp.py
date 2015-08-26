@@ -3,9 +3,10 @@ import os
 import subprocess
 import shutil
 import time
+import argparse
 
-work_dir = "/tmp"
-backup_repo_dir = "/media/hotspot/backups/freshtmp_repo"
+target_dir = "/tmp"
+backup_repo_dir = "/media/backups/freshtmp_repo"
 patch_extensions = [".patch", ".diff", ".patch~", ".diff~"]
 # How many minutes since last file modification should pass
 # before it is considered stale
@@ -46,7 +47,7 @@ def prepare_repo_dir():
 
 def move_files():
   print "Working..."
-  for directory, dirnames, filenames in os.walk(work_dir):
+  for directory, dirnames, filenames in os.walk(target_dir):
     for f in filenames:
       abs_path = os.path.join(directory, f)
       try:
@@ -79,7 +80,8 @@ def is_applicable(file_path):
 
 def move(file_path):
   # Extracts subpath from the working dir to a given path
-  subpath = os.path.relpath(os.path.dirname(file_path), os.path.abspath(work_dir))
+  subpath = os.path.relpath(os.path.dirname(file_path),
+                            os.path.abspath(target_dir))
   # new file location
   new_dir = os.path.join(backup_repo_dir, subpath)
   print "Moving {0} to {1}".format(file_path, new_dir)
@@ -100,6 +102,32 @@ def commit():
 
 
 def main():
+  parser = argparse.ArgumentParser(
+    description='This script cleans up patch files from a given dir',
+    epilog='Use at your own risk'
+  )
+  parser.add_argument('-d', '--working-directory', metavar='D', type=str,
+                      action='store', help='Target directory for cleanup')
+  parser.add_argument('-b', '--backup-directory', metavar='B', type=str,
+                      action='store', help='Backup directory')
+  parser.add_argument('-T', '--stale-minutes', metavar='T', type=int,
+                      action='store', help='How many minutes since last file '
+                                           'modification should pass before it '
+                                           'is considered stale')
+  args = parser.parse_args()
+
+  if args.d:
+    global target_dir
+    target_dir = args.d
+
+  if args.b:
+    global backup_repo_dir
+    backup_repo_dir = args.b
+
+  if args.t:
+    global stale_minutes
+    stale_minutes = args.t
+
   prepare_repo_dir()
   move_files()
   commit()
