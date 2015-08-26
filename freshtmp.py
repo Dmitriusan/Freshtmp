@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import os, subprocess
+import os
+import subprocess
 import shutil
 import time
 
@@ -9,7 +10,7 @@ patch_extensions = [".patch", ".diff", ".patch~", ".diff~"]
 # How many minutes since last file modification should pass
 # before it is considered stale
 stale_minutes = 120
-minute = 60 # seconds
+minute = 60  # seconds
 
 # How many file movements have been performed during run
 total_movements = 0
@@ -42,6 +43,7 @@ def prepare_repo_dir():
   subprocess.check_call(GIT_RESET_CMD)
   subprocess.check_call(GIT_CLEAN_CMD)
 
+
 def move_files():
   print "Working..."
   for directory, dirnames, filenames in os.walk(work_dir):
@@ -59,18 +61,21 @@ def move_files():
       # ignore
       pass
 
+
 def is_applicable(file_path):
-  '''
+  """
   Checks whether file is applicable for removal
-  '''
+  """
   ext = os.path.splitext(file_path)
   filename = os.path.basename(file_path)
   now = time.time()
-  result = os.path.isfile(file_path) and (ext[1] in patch_extensions or '.patch.' in filename)
-  if result: # additional check
+  result = os.path.isfile(file_path) and (ext[1] in patch_extensions or
+                                          '.patch.' in filename)
+  if result:  # additional check
     mod_time = os.stat(file_path).st_mtime
     result = mod_time < now - stale_minutes * minute
   return result
+
 
 def move(file_path):
   # Extracts subpath from the working dir to a given path
@@ -84,11 +89,12 @@ def move(file_path):
   global total_movements
   total_movements += 1
 
+
 def commit():
   print "Committing..."
   subprocess.check_call(GIT_ADD_CMD)
   # Adding commit message
-  message =time.strftime("Automatic commit on %d/%m/%Y %H:%M:%S")
+  message = time.strftime("Automatic commit on %d/%m/%Y %H:%M:%S")
   cmd = GIT_COMMIT_CMD + ["-m", message]
   subprocess.call(cmd)
 
