@@ -39,7 +39,7 @@ def prepare_repo_dir():
     os.makedirs(backup_repo_dir)
   os.chdir(backup_repo_dir)
   if not os.path.isdir(git_dir):
-    print "Initializing new git repository at {0}".format(backup_repo_dir)
+    print "Initializing new git repository at {0}".format(git_dir)
     subprocess.check_call(GIT_INIT_CMD)
     subprocess.check_call(TOUCH)
     subprocess.check_call(GIT_ADD_CMD)
