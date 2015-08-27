@@ -25,8 +25,6 @@ GIT_TAG_CMD = ["git", "tag", "initial"]
 GIT_RESET_CMD = ["git", "reset", "--hard", "initial"]
 GIT_ADD_CMD = ["git", "add", "."]
 GIT_COMMIT_CMD = ["git", "commit", "-a"]
-git_dir = os.path.join(backup_repo_dir, ".git")
-
 #####
 
 
@@ -38,6 +36,7 @@ def prepare_repo_dir():
     print "Creating repo dir {0}".format(backup_repo_dir)
     os.makedirs(backup_repo_dir)
   os.chdir(backup_repo_dir)
+  git_dir = os.path.join(backup_repo_dir, ".git")
   if not os.path.isdir(git_dir):
     print "Initializing new git repository at {0}".format(git_dir)
     subprocess.check_call(GIT_INIT_CMD)
