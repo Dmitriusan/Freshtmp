@@ -107,7 +107,7 @@ def commit():
 def remove_dropme_directories():
   print "Removing *.dropme directories if any..."
   for current_dir, dirnames, filenames in os.walk(target_dir):
-    if current_dir.endswith(".dropme") and \
+    if current_dir.endswith(".dropme") and is_stale(current_dir) and\
             check_latest_files_in_dropme_dir(current_dir):
       try:
         print("Decided to remove dir " + current_dir)
