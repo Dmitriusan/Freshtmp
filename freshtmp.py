@@ -55,7 +55,11 @@ def move_files():
     for f in filenames:
       abs_path = os.path.join(directory, f)
       try:
-        if is_applicable(abs_path):
+        ext = os.path.splitext(abs_path)
+        filename = os.path.basename(abs_path)
+        applicable = os.path.isfile(abs_path) and (ext[1] in patch_extensions or
+                                                   '.patch.' in filename)
+        if applicable and is_stale(abs_path):
           move(abs_path)
       except Exception, e:
         print "Can not move file {0} : {1}".format(abs_path, e.message)
@@ -67,18 +71,13 @@ def move_files():
       pass
 
 
-def is_applicable(file_path):
+def is_stale(file_path):
   """
-  Checks whether file is applicable for removal
+  Checks whether file is older then threshold
   """
-  ext = os.path.splitext(file_path)
-  filename = os.path.basename(file_path)
   now = time.time()
-  result = os.path.isfile(file_path) and (ext[1] in patch_extensions or
-                                          '.patch.' in filename)
-  if result:  # additional check
-    mod_time = os.stat(file_path).st_mtime
-    result = mod_time < now - stale_minutes * minute
+  mod_time = os.stat(file_path).st_mtime
+  result = mod_time < now - stale_minutes * minute
   return result
 
 
@@ -103,6 +102,37 @@ def commit():
   message = time.strftime("Automatic commit on %d/%m/%Y %H:%M:%S")
   cmd = GIT_COMMIT_CMD + ["-m", message]
   subprocess.call(cmd)
+
+
+def remove_dropme_directories():
+  print "Removing *.dropme directories if any..."
+  for current_dir, dirnames, filenames in os.walk(target_dir):
+    if current_dir.endswith(".dropme") and \
+            check_latest_files_in_dropme_dir(current_dir):
+      try:
+        print("Decided to remove dir " + current_dir)
+        shutil.rmtree(current_dir)
+      except OSError:
+        # ignore
+        pass
+  pass
+
+
+def check_latest_files_in_dropme_dir(dropme_dir):
+  """
+  Iterate over files in dropme dir
+  :param dropme_dir:
+  :return:  True if even latest files in dir are stale
+  """
+  for subdir, subsubdirs, subfiles in os.walk(dropme_dir):
+    for subfile in subfiles:
+      abs_path = os.path.join(subdir, subfile)
+      try:
+        if not is_stale(abs_path):
+          return False
+      except Exception, e:
+        print "Can not stat file {0}: {1}".format(abs_path, e.message)
+  return True
 
 
 def main():
@@ -135,6 +165,7 @@ def main():
   prepare_repo_dir()
   move_files()
   commit()
+  remove_dropme_directories()
   global total_movements
   print "Totals: {0} file(s) moved".format(total_movements)
 
