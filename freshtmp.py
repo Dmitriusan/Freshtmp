@@ -18,7 +18,11 @@ total_movements = 0
 
 #####
 
-GIT_INIT_CMD = ["git", "init"]
+GIT_INIT_CMDS = [
+  ["git", "init"],
+  ["git", "config", "user.email", "script@freshtmp"],
+  ["git", "config", "user.name", "Freshtmp script"],
+]
 GIT_CLEAN_CMD = ["git", "clean", "-df"]
 TOUCH = ["touch", "placeholder"]
 GIT_TAG_CMD = ["git", "tag", "initial"]
@@ -39,7 +43,8 @@ def prepare_repo_dir():
   git_dir = os.path.join(backup_repo_dir, ".git")
   if not os.path.isdir(git_dir):
     print "Initializing new git repository at {0}".format(git_dir)
-    subprocess.check_call(GIT_INIT_CMD)
+    for init_cmd in GIT_INIT_CMDS:
+      subprocess.check_call(init_cmd)
     subprocess.check_call(TOUCH)
     subprocess.check_call(GIT_ADD_CMD)
     cmd = GIT_COMMIT_CMD + ["-m", "Initial commit"]
